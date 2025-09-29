@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "actions",
+  "info": {
+    "singularName": "action",
+    "pluralName": "actions",
+    "displayName": "Action"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "buttons": {
+      "type": "component",
+      "component": "shared.action-buttons",
+      "repeatable": true
+    }
+  }
+}

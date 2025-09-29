@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_shared_buttons",
+  "info": {
+    "displayName": "buttons"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "link": {
+      "type": "text",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "login",
+        "signup",
+        "logout"
+      ]
+    }
+  },
+  "config": {}
+}

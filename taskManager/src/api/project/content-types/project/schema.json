@@ -4,13 +4,22 @@
   "info": {
     "singularName": "project",
     "pluralName": "projects",
-    "displayName": "project"
+    "displayName": "Project"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
     "name": {
       "type": "string",
       "required": true
@@ -33,7 +42,7 @@
       "target": "api::task.task",
       "mappedBy": "project"
     },
-    "admin_user": {
+    "adminUser": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "admin::user"

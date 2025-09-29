@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_action_buttons",
+  "info": {
+    "displayName": "actionButtons"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "link": {
+      "type": "text",
+      "required": true
+    }
+  },
+  "config": {}
+}

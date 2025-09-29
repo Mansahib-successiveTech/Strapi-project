@@ -4,7 +4,7 @@
   "info": {
     "singularName": "comment",
     "pluralName": "comments",
-    "displayName": "comment"
+    "displayName": "Comment"
   },
   "options": {
     "draftAndPublish": true
