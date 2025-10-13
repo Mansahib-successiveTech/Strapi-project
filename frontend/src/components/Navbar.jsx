@@ -5,51 +5,62 @@ import { GET_NAVBAR } from "@/lib/queries";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import GoogleLoginButton from "./OAuth";
 
 export default function Navbar() {
   const { data, loading, error } = useQuery(GET_NAVBAR);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
-  // Check JWT on mount
-  useEffect(() => {
-    const token = localStorage.getItem("strapi_jwt");
+  const checkAuth = () => {
+    const token = localStorage.getItem("login");
     setIsAuthenticated(!!token);
+  };
+
+  // Run on mount and listen for custom events + storage changes
+  useEffect(() => {
+    checkAuth(); // initial check
+
+    // Listen for storage changes (other tabs)
+    window.addEventListener("storage", checkAuth);
+
+    // Listen for login/logout events in the same tab
+    window.addEventListener("authChange", checkAuth);
+
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("authChange", checkAuth);
+    };
   }, []);
 
   if (loading) return null;
-  if (error) return <p>{error.message}</p>;
+  if (error) return <p className="text-red-500">{error.message}</p>;
 
-  const navbar = data.navbars[0]; // assuming single navbar
+  const navbar = data.navbars[0];
   const { title, buttons } = navbar;
 
   const handleLogout = () => {
+    localStorage.removeItem("login");
     localStorage.removeItem("strapi_jwt");
-    localStorage.removeItem("hasSeenHero");
+    localStorage.removeItem("strapi_user");
     setIsAuthenticated(false);
-    router.push("/login");
+
+    // Notify other components in the same tab
+    window.dispatchEvent(new Event("authChange"));
+
+    router.push("/");
   };
 
   return (
     <nav className="flex justify-between items-center p-4 bg-gray-800 text-white">
       <Link href="/">
-      <h1 className="text-xl font-bold">{title}</h1>
+        <h1 className="text-xl font-bold cursor-pointer">{title}</h1>
       </Link>
       <div className="space-x-4">
-        {/* Render login/signup only if not authenticated */}
-        {buttons
-          .filter((btn) => (btn.type === "login" || btn.type === "signup") && !isAuthenticated)
-          .map((btn) => (
-            <a
-              key={btn.id}
-              href={btn.link}
-              className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
-            >
-              {btn.label}
-            </a>
-          ))}
+        {!isAuthenticated &&
+        <GoogleLoginButton />
+        }
 
-        {/* Show logout button if authenticated */}
         {isAuthenticated && (
           <button
             onClick={handleLogout}

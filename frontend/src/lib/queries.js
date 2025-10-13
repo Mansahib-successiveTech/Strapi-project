@@ -1,6 +1,36 @@
 import { gql } from "@apollo/client";
 
-export const GET_HERO = gql`
+export async function fetchGraphQL(query, variables = {}) {
+  try {
+    const res = await fetch("http://localhost:3000/api/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store", // ensures SSR always fetches fresh data
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+      cache:"no-store",
+    });
+
+    const json = await res.json();
+
+    if (json.errors) {
+      console.error("GraphQL Errors:", json.errors);
+      throw new Error("Failed to fetch GraphQL data");
+    }
+
+    return json.data;
+  } catch (error) {
+    console.error("GraphQL Fetch Error:", error);
+    throw error;
+  }
+}
+
+// Queries as plain strings
+export const GET_HERO = `
   query {
     heroBanners {
       documentId
@@ -13,9 +43,9 @@ export const GET_HERO = gql`
   }
 `;
 
-export const GET_PROJECTS = gql`
-  query Projects($pagination: PaginationArg) {
-    projects(pagination: $pagination) {
+export const GET_PROJECTS = `
+  query Projects($status: PublicationStatus,$pagination: PaginationArg) {
+    projects(status: $status,pagination: $pagination) {
       documentId
       name
       description
@@ -43,6 +73,7 @@ export const GET_PROJECTS = gql`
   }
 `;
 
+
 export const GET_USERS = gql`
   query UsersPermissionsUsers {
     usersPermissionsUsers {
@@ -65,18 +96,6 @@ export const GET_NAVBAR = gql`
         label
         id
         type
-      }
-    }
-  }
-`;
-export const GET_ACTIONS = gql`
-  query GetActions {
-    actions {
-      documentId
-      buttons {
-        link
-        label
-        id
       }
     }
   }

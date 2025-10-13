@@ -46,6 +46,15 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "admin::user"
+    },
+    "projectStatus": {
+      "type": "enumeration",
+      "default": "draft",
+      "enum": [
+        "draft",
+        "reviewed",
+        "published"
+      ]
     }
   }
 }

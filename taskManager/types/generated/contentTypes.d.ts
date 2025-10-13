@@ -547,6 +547,10 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    projectStatus: Schema.Attribute.Enumeration<
+      ['draft', 'reviewed', 'published']
+    > &
+      Schema.Attribute.DefaultTo<'draft'>;
     publishedAt: Schema.Attribute.DateTime;
     startDate: Schema.Attribute.Date & Schema.Attribute.Required;
     tasks: Schema.Attribute.Relation<'oneToMany', 'api::task.task'>;
